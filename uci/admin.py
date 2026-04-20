@@ -11,13 +11,13 @@ class RaceAdmin(admin.ModelAdmin):
 
 @admin.register(Rider)
 class RiderAdmin(admin.ModelAdmin):
-    list_display = ['first_name', 'last_name', 'nationality', 'date_of_birth']
+    list_display = ['name', 'nationality', 'date_of_birth']
     list_filter = ['nationality']
-    search_fields = ['first_name', 'last_name']
+    search_fields = ['name']
 
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ['name', 'race', 'distance_km', 'elevation_gain_m']
+    list_display = ['name', 'race', 'distance_km', 'elevation_gain_m', 'start', 'end']
     list_filter = ['race']
     search_fields = ['name']

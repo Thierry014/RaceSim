@@ -1,1 +1,1 @@
-# admin.py in uci ? 
+# admin.py in uci ? => make it available for /admin
