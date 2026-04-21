@@ -1,6 +1,6 @@
 from django.db import models
 from .race import Race
-
+from .rider import Rider
 
 class Course(models.Model):
     race = models.ForeignKey(Race, on_delete=models.CASCADE, related_name='courses')
@@ -12,6 +12,8 @@ class Course(models.Model):
     note = models.CharField(max_length=500, null=True, blank=True)
     key_point = models.CharField(max_length=500, null=True, blank=True)
     profile_score = models.IntegerField(null=True, blank=True)
+    winner = models.ForeignKey(Rider, on_delete=models.CASCADE, null=True, blank=True, related_name='course_winner')
+    predict_winner = models.ForeignKey(Rider, on_delete=models.CASCADE, null=True, blank=True, related_name='course_predict_winner')
 
     def __str__(self):
         return f"{self.race.name} - {self.start} ~ {self.end}"

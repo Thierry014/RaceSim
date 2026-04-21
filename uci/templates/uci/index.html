@@ -95,6 +95,11 @@
             cursor: pointer;
             position: relative;
         }
+        .course-winner {
+            height: 30px;
+            line-height: 30px;
+        }
+
         .course-icon:hover::after {
             content: attr(title);
             position: absolute;
@@ -141,9 +146,13 @@
                             <span class="course-icons">
                                 {% for course in race.courses.all %}
                                     <span class="course-icon" title="{{ course.name }}">{{ forloop.counter }}</span>
+                                    <span class="course-winner">{{ course.winner }}</span>
                                 {% endfor %}
                             </span>
                         {% endif %}
+                    </div>
+                    <div class="race-winner">
+                        {{ race.winner }}
                     </div>
                 </div>
             {% endfor %}
