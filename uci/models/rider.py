@@ -4,7 +4,7 @@ from datetime import date
 
 
 class Rider(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     nationality = models.CharField(max_length=100, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     note = models.CharField(max_length=500, null=True, blank=True)

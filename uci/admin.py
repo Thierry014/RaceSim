@@ -18,7 +18,7 @@ class RiderAdmin(admin.ModelAdmin):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ['name', 'winner']
+    list_display = ['name', 'winner', 'predict_winner', 'elevation_gain_m']
     list_filter = ['race']
     search_fields = ['name']
 
