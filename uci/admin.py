@@ -11,8 +11,8 @@ class RaceAdmin(admin.ModelAdmin):
 
 @admin.register(Rider)
 class RiderAdmin(admin.ModelAdmin):
-    list_display = ['name', 'nationality', 'age', 'form']
-    list_filter = ['nationality']
+    list_display = ['name', 'nationality', 'age', 'form', 'form_trend']
+    list_filter = ['nationality', 'breakaway']
     search_fields = ['name']
 
 

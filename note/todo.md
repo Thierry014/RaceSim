@@ -1,3 +1,6 @@
-# admin.py in uci ? => make it available for /admin (OK)
 # Rider page design, Race/Course page design 
 
+# new model game (for predict)
+# Game > selection (user, score, odd, rider)
+
+# check how to use sqlite3 in pycharm

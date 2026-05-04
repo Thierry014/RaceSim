@@ -9,11 +9,13 @@ class Course(models.Model):
     end = models.CharField(max_length=120, null=True, blank=True)
     distance_km = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     elevation_gain_m = models.IntegerField(null=True, blank=True)
-    note = models.CharField(max_length=500, null=True, blank=True)
+    note = models.TextField(max_length=500, null=True, blank=True)
     key_point = models.CharField(max_length=500, null=True, blank=True)
     profile_score = models.IntegerField(null=True, blank=True)
     winner = models.ForeignKey(Rider, on_delete=models.CASCADE, null=True, blank=True, related_name='course_winner')
     predict_winner = models.ForeignKey(Rider, on_delete=models.CASCADE, null=True, blank=True, related_name='course_predict_winner')
+    pre_analysis = models.TextField(max_length=500, null=True, blank=True)
+    course_url = models.URLField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.race.name} - {self.start} ~ {self.end}"

@@ -21,6 +21,7 @@ class Race(models.Model):
     winner = models.ForeignKey(Rider, on_delete=models.CASCADE, null=True, blank=True, related_name='race_winner')
     predict_winner = models.ForeignKey(Rider, on_delete=models.CASCADE, null=True, blank=True, related_name='race_predict_winner')
     one_day_race = models.BooleanField(default=False)
+    note = models.TextField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None
