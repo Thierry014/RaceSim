@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('course/', views.course_list, name='course_list'),
     path('course/<int:pk>/', views.course_detail, name='course_detail'),
+    path('course/<int:course_pk>/bet/', views.bet_create, name='bet_create'),
     # path('race/', views.race_list, name='race_list'),
     # path('rider/', views.rider_list, name='rider_list'),
 ]

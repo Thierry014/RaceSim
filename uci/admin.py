@@ -1,5 +1,20 @@
 from django.contrib import admin
-from .models import Race, Rider, Course, Result, Blog
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
+from .models import Race, Rider, Course, Result, Blog, UserProfile, Bet
+
+
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    can_delete = False
+
+
+class CustomUserAdmin(UserAdmin):
+    inlines = [UserProfileInline]
+
+
+admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)
 
 
 @admin.register(Race)
@@ -44,3 +59,10 @@ class BlogAdmin(admin.ModelAdmin):
     list_display = ['title', 'publish_date', 'published']
     list_filter = ['published']
     search_fields = ['title']
+
+
+@admin.register(Bet)
+class BetAdmin(admin.ModelAdmin):
+    list_display = ['user', 'rider', 'course', 'bet_amount', 'odd_rate', 'credit_return', 'status']
+    list_filter = ['status']
+    search_fields = ['user__username', 'rider__name']

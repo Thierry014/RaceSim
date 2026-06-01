@@ -21,7 +21,7 @@ class Course(models.Model):
     bingo_rate = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.race.name} - {self.start} ~ {self.end}"
+        return f"{self.name}-{self.winner}"
 
     @property
     def bingo(self):

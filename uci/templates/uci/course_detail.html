@@ -49,6 +49,77 @@
         a:hover {
             text-decoration: underline;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background-color: #0066cc;
+            color: white;
+            padding: 10px 15px;
+            text-align: left;
+            font-size: 14px;
+        }
+        td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            color: #333;
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background-color: #f9f9f9; }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            color: white;
+        }
+        .badge.pending { background-color: #6c757d; }
+        .badge.won { background-color: #28a745; }
+        .badge.lost { background-color: #dc3545; }
+        .badge.cancelled { background-color: #ffc107; color: #333; }
+        .no-data { color: #999; font-style: italic; padding: 20px; text-align: center; }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .btn-bet { background-color: #0066cc; color: white; }
+        .btn-bet:hover { background-color: #0052a3; }
+        .btn-cancel { background-color: #6c757d; color: white; }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            width: 400px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .modal h3 { margin-top: 0; color: #333; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; color: #666; font-weight: bold; margin-bottom: 4px; }
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -120,6 +191,78 @@
             <span class="value">{{ course.note }}</span>
         </div>
         {% endif %}
+    </div>
+
+    <div class="card">
+        <h2 style="margin-top:0; color:#333; display:inline-block;">Bets</h2>
+        <button class="btn btn-bet" style="float:right;" onclick="document.getElementById('betModal').classList.add('active')">BET</button>
+        {% if bets %}
+        <table>
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Rider</th>
+                    <th>Bet Amount</th>
+                    <th>Odd Rate</th>
+                    <th>Credit Return</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bet in bets %}
+                <tr>
+                    <td>{{ bet.user }}</td>
+                    <td>{{ bet.rider }}</td>
+                    <td>{{ bet.bet_amount|default:"-" }}</td>
+                    <td>{{ bet.odd_rate }}</td>
+                    <td style="{% if bet.credit_return > 0 %}color:#28a745;{% elif bet.credit_return < 0 %}color:#dc3545;{% endif %} font-weight:bold;">{{ bet.credit_return|default:"-" }}</td>
+                    <td><span class="badge {{ bet.status }}">{{ bet.get_status_display }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <div class="no-data">No bets for this course.</div>
+        {% endif %}
+    </div>
+
+    <div class="modal-overlay" id="betModal">
+        <div class="modal">
+            <h3>Place a Bet</h3>
+            <form method="post" action="{% url 'uci:bet_create' course.pk %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>User</label>
+                    <select name="user" required>
+                        <option value="">-- Select User --</option>
+                        {% for user in users %}
+                            <option value="{{ user.pk }}">{{ user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Rider</label>
+                    <select name="rider" required>
+                        <option value="">-- Select Rider --</option>
+                        {% for rider in riders %}
+                            <option value="{{ rider.pk }}">{{ rider.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Odd Rate</label>
+                    <input type="number" name="odd_rate" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label>Bet Amount</label>
+                    <input type="number" name="bet_amount" step="0.01" min="0" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-cancel" onclick="document.getElementById('betModal').classList.remove('active')">Cancel</button>
+                    <button type="submit" class="btn btn-bet">Place Bet</button>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 </html>
