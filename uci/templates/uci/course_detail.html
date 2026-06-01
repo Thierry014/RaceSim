@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 10px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .field {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .field:last-child {
+            border-bottom: none;
+        }
+        .label {
+            width: 200px;
+            color: #666;
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .value {
+            color: #333;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <a href="/">&larr; Back</a>
+    <h1>{{ course }}</h1>
+
+    <div class="card">
+        <div class="field">
+            <span class="label">Race</span>
+            <span class="value">{{ course.race }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Start</span>
+            <span class="value">{{ course.start|default:"-" }}</span>
+        </div>
+        <div class="field">
+            <span class="label">End</span>
+            <span class="value">{{ course.end|default:"-" }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Distance</span>
+            <span class="value">{% if course.distance_km %}{{ course.distance_km }} km{% else %}-{% endif %}</span>
+        </div>
+        <div class="field">
+            <span class="label">Elevation Gain</span>
+            <span class="value">{% if course.elevation_gain_m %}{{ course.elevation_gain_m }} m{% else %}-{% endif %}</span>
+        </div>
+        <div class="field">
+            <span class="label">Profile Score</span>
+            <span class="value">{{ course.profile_score|default:"-" }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Winner</span>
+            <span class="value">{{ course.winner|default:"-" }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Predicted Winner</span>
+            <span class="value">{{ course.predict_winner|default:"-" }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Bingo</span>
+            <span class="value">{{ course.bingo }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Breakaway Win</span>
+            <span class="value">{{ course.is_won_by_breakaway }}</span>
+        </div>
+        {% if course.course_url %}
+        <div class="field">
+            <span class="label">URL</span>
+            <span class="value"><a href="{{ course.course_url }}" target="_blank">{{ course.course_url }}</a></span>
+        </div>
+        {% endif %}
+        {% if course.key_point %}
+        <div class="field">
+            <span class="label">Key Point</span>
+            <span class="value">{{ course.key_point }}</span>
+        </div>
+        {% endif %}
+        {% if course.pre_analysis %}
+        <div class="field">
+            <span class="label">Pre Analysis</span>
+            <span class="value">{{ course.pre_analysis }}</span>
+        </div>
+        {% endif %}
+        {% if course.note %}
+        <div class="field">
+            <span class="label">Note</span>
+            <span class="value">{{ course.note }}</span>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

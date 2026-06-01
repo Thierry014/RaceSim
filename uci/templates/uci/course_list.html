@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 10px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background-color: #0066cc;
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 14px;
+        }
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            color: #333;
+            font-size: 14px;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:hover td {
+            background-color: #f9f9f9;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .no-data {
+            color: #999;
+            font-style: italic;
+            text-align: center;
+            padding: 30px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            color: white;
+        }
+        .badge.blue { background-color: #0066cc; }
+        .badge.green { background-color: #28a745; }
+        .badge.red { background-color: #dc3545; }
+    </style>
+</head>
+<body>
+    <a href="/">&larr; Back</a>
+    <h1>Courses</h1>
+
+    <div class="card">
+        {% if courses %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Course</th>
+                    <th>Race</th>
+                    <th>Distance</th>
+                    <th>Elevation</th>
+                    <th>Winner</th>
+                    <th>Predicted</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                <tr>
+                    <td><a href="{% url 'uci:course_detail' course.pk %}">{{ course.name }}</a></td>
+                    <td>{{ course.race }}</td>
+                    <td>{% if course.distance_km %}{{ course.distance_km }} km{% else %}-{% endif %}</td>
+                    <td>{% if course.elevation_gain_m %}{{ course.elevation_gain_m }} m{% else %}-{% endif %}</td>
+                    <td>{{ course.winner|default:"-" }}</td>
+                    <td>{{ course.predict_winner|default:"-" }}</td>
+                    <td>
+                        {% if not course.winner %}
+                            <span class="badge blue">Pending</span>
+                        {% elif course.bingo %}
+                            <span class="badge green">Bingo</span>
+                        {% else %}
+                            <span class="badge red">Miss</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <div class="no-data">No courses found.</div>
+        {% endif %}
+    </div>
+</body>
+</html>

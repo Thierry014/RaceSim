@@ -12,10 +12,17 @@ class Course(models.Model):
     note = models.TextField(max_length=500, null=True, blank=True)
     key_point = models.CharField(max_length=500, null=True, blank=True)
     profile_score = models.IntegerField(null=True, blank=True)
+    profile_score_20k = models.IntegerField(null=True, blank=True)
     winner = models.ForeignKey(Rider, on_delete=models.CASCADE, null=True, blank=True, related_name='course_winner')
     predict_winner = models.ForeignKey(Rider, on_delete=models.CASCADE, null=True, blank=True, related_name='course_predict_winner')
     pre_analysis = models.TextField(max_length=500, null=True, blank=True)
     course_url = models.URLField(null=True, blank=True)
+    is_won_by_breakaway = models.BooleanField(default=False)
+    bingo_rate = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
         return f"{self.race.name} - {self.start} ~ {self.end}"
+
+    @property
+    def bingo(self):
+        return self.predict_winner == self.winner and self.winner is not None

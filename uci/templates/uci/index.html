@@ -85,7 +85,6 @@
             display: inline-block;
             width: 30px;
             height: 30px;
-            background-color: #0066cc;
             border-radius: 3px;
             font-size: 20px;
             color: white;
@@ -94,6 +93,16 @@
             font-weight: bold;
             cursor: pointer;
             position: relative;
+        }
+        .course-icon.blue { background-color: #0066cc; }
+        .course-icon.green { background-color: #28a745; }
+        .course-icon.red { background-color: #dc3545; }
+        .legend {
+            display: inline-flex;
+            gap: 5px;
+            margin-left: 10px;
+            vertical-align: middle;
+            font-size: 14px;
         }
         .course-winner {
             height: 30px;
@@ -129,13 +138,22 @@
             <div class="number">{{ total_riders }}</div>
         </div>
         <div class="stat-card">
-            <h3>Total Courses</h3>
-            <div class="number">{{ total_courses }}</div>
+            {# %url app:view_name params          #}
+            <a href="{% url 'uci:course_list' %}">
+                <h3>Total Courses</h3>
+                <div class="number">{{ total_courses }}</div>
+            </a>
         </div>
     </div>
 
     <div class="recent-races">
-        <h2>Recent Races</h2>
+        <h2>Recent Races
+            <span class="legend">
+                <span class="course-icon blue" title="Not started">?</span>
+                <span class="course-icon green" title="Bingo">Y</span>
+                <span class="course-icon red" title="Wrong prediction">N</span>
+            </span>
+        </h2>
         {% if recent_races %}
             {% for race in recent_races %}
                 <div class="race-item">
@@ -144,8 +162,8 @@
                         {{ race.date }} | {{ race.location }} | {{ race.get_category_display }}
                         {% if race.courses.all %}
                             <span class="course-icons">
-                                {% for course in race.courses.all %}
-                                    <span class="course-icon" title="{{ course.name }}">{{ forloop.counter }}</span>
+                                {% for course in race.courses.all|slice:"6" %}
+                                    <a href="{% url 'uci:course_detail' course.pk %}"><span class="course-icon {% if not course.winner %}blue{% elif course.bingo %}green{% else %}red{% endif %}" title="{{ course.name }}">{{ forloop.counter }}</span></a>
                                     <span class="course-winner">{{ course.winner }}</span>
                                 {% endfor %}
                             </span>
