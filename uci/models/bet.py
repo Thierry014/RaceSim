@@ -22,3 +22,15 @@ class Bet(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.rider} - {self.bet_amount} - ({self.status}) - ({self.credit_return})"
+
+    def settle(self, rider):
+        amount_to_settle = self.odd_rate * self.bet_amount or 0
+        if rider == self.rider:
+            self.credit_return = amount_to_settle
+            self.status = 'won'
+            self.user.profile.credit += amount_to_settle
+        else:
+            self.credit_return = self.bet_amount * -1
+            self.status = 'lost'
+        self.save()
+        self.user.profile.save()

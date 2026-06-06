@@ -89,6 +89,7 @@
             font-weight: bold;
         }
         .btn-bet { background-color: #0066cc; color: white; }
+        .btn-settled { background-color: #ff0000; color: white; }
         .btn-bet:hover { background-color: #0052a3; }
         .btn-cancel { background-color: #6c757d; color: white; }
         .modal-overlay {
@@ -195,7 +196,12 @@
 
     <div class="card">
         <h2 style="margin-top:0; color:#333; display:inline-block;">Bets</h2>
-        <button class="btn btn-bet" style="float:right;" onclick="document.getElementById('betModal').classList.add('active')">BET</button>
+        {% if not course.settled %}
+            <button class="btn btn-settle" style="float:right;" onclick="document.getElementById('settleModal').classList.add('active')">Settle</button>
+            <button class="btn btn-bet" style="float:right;" onclick="document.getElementById('betModal').classList.add('active')">BET</button>
+        {% else %}
+            <button class="btn btn-settled" style="float:right;)">BET Settled</button>
+        {% endif %}
         {% if bets %}
         <table>
             <thead>
@@ -225,7 +231,7 @@
             <div class="no-data">No bets for this course.</div>
         {% endif %}
     </div>
-
+{#Bet Form#}
     <div class="modal-overlay" id="betModal">
         <div class="modal">
             <h3>Place a Bet</h3>
@@ -260,6 +266,29 @@
                 <div class="modal-actions">
                     <button type="button" class="btn btn-cancel" onclick="document.getElementById('betModal').classList.remove('active')">Cancel</button>
                     <button type="submit" class="btn btn-bet">Place Bet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{#Settle Form#}
+    <div class="modal-overlay" id="settleModal">
+        <div class="modal">
+            <h3>Settle a Bet</h3>
+            <form method="post" action="{% url 'uci:bet_settle' course.pk %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Winner</label>
+                    <select name="rider" required>
+                        <option value="">-- Select Rider --</option>
+                        {% for rider in riders %}
+                            <option value="{{ rider.pk }}">{{ rider.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-cancel" onclick="document.getElementById('settleModal').classList.remove('active')">Cancel</button>
+                    <button type="submit" class="btn btn-bet">Settle Bet</button>
                 </div>
             </form>
         </div>

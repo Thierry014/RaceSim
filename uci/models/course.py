@@ -19,6 +19,7 @@ class Course(models.Model):
     course_url = models.URLField(null=True, blank=True)
     is_won_by_breakaway = models.BooleanField(default=False)
     bingo_rate = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    settled = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.name}-{self.winner}"

@@ -1,7 +1,8 @@
+from decimal import Decimal
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import Race, Rider, Course, Bet
+from .models import Race, Rider, Course, Bet, Blog
 
 
 def index(request):
@@ -13,6 +14,7 @@ def index(request):
         'total_races': races.count(),
         'total_riders': riders.count(),
         'total_courses': courses.count(),
+        'total_blogs': Blog.objects.all().count(),
         'recent_races': races.order_by('-date')[:10],
     }
     return render(request, 'uci/index.html', context)
@@ -46,4 +48,19 @@ def bet_create(request, course_pk):
             odd_rate=odd_rate,
             bet_amount=bet_amount,
         )
+        user.profile.credit -= Decimal(bet_amount)
+        user.profile.save()
+    return redirect('uci:course_detail', pk=course_pk)
+
+def bet_settle(request, course_pk):
+    course = get_object_or_404(Course, pk=course_pk)
+    if request.method == 'POST':
+        rider_id = request.POST.get('rider')
+        bets = Bet.objects.filter(course=course).select_related('user', 'rider')
+        rider_win = Rider.objects.get(pk=rider_id)
+        for bet in bets:
+            bet.settle(rider_win)
+        course.winner = rider_win
+        course.settled = True
+        course.save()
     return redirect('uci:course_detail', pk=course_pk)

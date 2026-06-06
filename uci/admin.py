@@ -11,6 +11,14 @@ class UserProfileInline(admin.StackedInline):
 
 class CustomUserAdmin(UserAdmin):
     inlines = [UserProfileInline]
+    list_display = UserAdmin.list_display + ('get_credit',)
+
+    @admin.display(description='Credit')
+    def get_credit(self, obj):
+        try:
+            return obj.profile.credit
+        except UserProfile.DoesNotExist:
+            return '-'
 
 
 admin.site.unregister(User)
