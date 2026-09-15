@@ -13,7 +13,7 @@ class Rider(models.Model):
     ]
 
     FORM_TO_TREND = {1: 'low', 2: 'decrease', 3: 'normal', 4: 'increase', 5: 'high'}
-    SCORE_VALIDATORS = [MinValueValidator(1), MaxValueValidator(10)]
+    SCORE_VALIDATORS = [MinValueValidator(1), MaxValueValidator(100)]
 
     name = models.CharField(max_length=100, unique=True)
     nationality = models.CharField(max_length=100, null=True, blank=True)
@@ -24,11 +24,19 @@ class Rider(models.Model):
     breakaway = models.BooleanField(default=False)
     breakaway_note = models.CharField(max_length=100, null=True, blank=True)
 
-    score_climb = models.FloatField(null=True, blank=True, default=1, validators=SCORE_VALIDATORS)
-    score_wave = models.FloatField(null=True, blank=True, default=1, validators=SCORE_VALIDATORS)
-    score_punch = models.FloatField(null=True, blank=True, default=1, validators=SCORE_VALIDATORS)
-    score_tt = models.FloatField(null=True, blank=True, default=1, validators=SCORE_VALIDATORS)
-    score_sprint = models.FloatField(null=True, blank=True, default=1, validators=SCORE_VALIDATORS)
+    score_climb = models.IntegerField(null=True, blank=True, default=1, validators=SCORE_VALIDATORS)
+    score_wave = models.IntegerField(null=True, blank=True, default=1, validators=SCORE_VALIDATORS)
+    score_punch = models.IntegerField(null=True, blank=True, default=1, validators=SCORE_VALIDATORS)
+    score_tt = models.IntegerField(null=True, blank=True, default=1, validators=SCORE_VALIDATORS)
+    score_sprint = models.IntegerField(null=True, blank=True, default=1, validators=SCORE_VALIDATORS)
+    score_steep = models.IntegerField(null=True, blank=True, default=1, validators=SCORE_VALIDATORS)
+
+    limit_distance = models.FloatField(null=True, blank=True, default=10)
+    limit_slope = models.FloatField(null=True, blank=True, default=10)
+
+    form_history_cache = models.JSONField(default=list, blank=True)
+
+    FORM_HISTORY_CACHE_MAX = 10
 
     class Meta:
         ordering = ['name']  # for admin
@@ -43,6 +51,7 @@ class Rider(models.Model):
         )
 
     def save(self, *args, **kwargs):
+        form_changed = False
         if self.form is not None and self.pk:
             previous = Rider.objects.filter(pk=self.pk).values_list('form', flat=True).first()
             if previous is not None:
@@ -57,8 +66,19 @@ class Rider(models.Model):
                     self.form_trend = 'decrease'
                 else:
                     self.form_trend = 'low'
+                form_changed = delta != 0
+            else:
+                form_changed = True
+        elif self.form is not None:
+            form_changed = True
+
+        if form_changed:
+            history = list(self.form_history_cache or [])
+            history.append(self.form)
+            self.form_history_cache = history[-self.FORM_HISTORY_CACHE_MAX:]
+
         super().save(*args, **kwargs)
-        if self.form is not None:
+        if form_changed:
             RiderFormHistory.objects.create(rider=self, form=self.form)
 
     def __str__(self):

@@ -23,6 +23,9 @@ class Race(models.Model):
     one_day_race = models.BooleanField(default=False)
     note = models.TextField(null=True, blank=True)
 
+    class Meta:
+        ordering = ['-date']
+
     def save(self, *args, **kwargs):
         is_new = self.pk is None
         super().save(*args, **kwargs)

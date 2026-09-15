@@ -34,7 +34,7 @@ class RaceAdmin(admin.ModelAdmin):
 
 @admin.register(Rider)
 class RiderAdmin(admin.ModelAdmin):
-    list_display = ['name', 'nationality', 'get_age', 'form', 'form_trend']
+    list_display = ['name', 'nationality', 'get_age', 'form', 'form_trend', 'score_climb', 'score_tt', 'score_wave', 'score_punch', 'score_sprint']
     list_filter = ['nationality', 'breakaway']
     search_fields = ['name']
 
@@ -45,7 +45,7 @@ class RiderAdmin(admin.ModelAdmin):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ['name', 'winner', 'predict_winner', 'elevation_gain_m', 'get_is_won_by_breakaway', 'get_bingo', 'bingo_rate']
+    list_display = ['name', 'winner', 'predict_winner', 'profile_score', 'get_is_won_by_breakaway', 'get_bingo', 'bingo_rate']
     list_filter = ['race']
     search_fields = ['name']
 
@@ -57,9 +57,9 @@ class CourseAdmin(admin.ModelAdmin):
     def get_bingo(self, obj):
         return obj.bingo
 
-@admin.register(Result)
-class ResultAdmin(admin.ModelAdmin):
-    list_display = ['course', 'rider', 'rank']
+# @admin.register(Result)
+# class ResultAdmin(admin.ModelAdmin):
+#     list_display = ['course', 'rider', 'rank']
 
 
 @admin.register(Blog)
