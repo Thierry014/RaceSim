@@ -15,7 +15,7 @@ class Course(models.Model):
     distance_km = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     elevation_gain_m = models.IntegerField(null=True, blank=True)
     note = models.TextField(max_length=500, null=True, blank=True)
-    key_point = models.CharField(max_length=500, null=True, blank=True)
+    key_point = models.JSONField(null=True, blank=True, default=list)
     profile_score = models.IntegerField(null=True, blank=True)
     profile_score_20k = models.IntegerField(null=True, blank=True)
     winner = models.ForeignKey(Rider, on_delete=models.CASCADE, null=True, blank=True, related_name='course_winner')

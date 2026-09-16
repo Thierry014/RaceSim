@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Race, Rider, Course, Bet, Blog
-
+from .forms import PredictForm
 
 def index(request):
     races = Race.objects.all()
@@ -30,6 +30,21 @@ def course_detail(request, pk):
     users = User.objects.all()
     return render(request, 'uci/course_detail.html', {'course': course, 'bets': bets, 'riders': riders, 'users': users})
 
+def course_predict(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+    if request.method == "POST":
+        form = PredictForm(request.POST)
+        if form.is_valid():
+            rds = form.cleaned_data['riders']
+            kps = course.key_point
+            # import predict engine
+            # result = PredictEngine.predict(rds, kps)
+            # course.pre_analysis = result
+            # course.save()
+    else:
+        form = PredictForm()
+        return render(request, 'uci/course_predict.html', {'form': form, 'course': course})
+    return render(request, 'uci/course_detail.html', {'form': form, 'course': course})
 
 # @login_required
 def bet_create(request, course_pk):

@@ -192,6 +192,7 @@
             <span class="value">{{ course.note }}</span>
         </div>
         {% endif %}
+        <a href="{% url 'uci:course_predict' course.pk %}">X</a>
     </div>
 
     <div class="card">
