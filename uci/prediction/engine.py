@@ -35,7 +35,7 @@ class PredictEngine:
                     break
             # todo course summary should not just check the kps, it should check course profile as well
             # course_summary = key_points[-1]
-            course_summary = [('climb', 90), ('punch', 10)]
+            course_summary = [('climb', 70), ('punch', 30)]
             # [('climb', 90), ('punch', 10)]
             if not rider.dropped:
                 rdr_score = 0

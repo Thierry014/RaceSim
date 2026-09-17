@@ -25,8 +25,11 @@ class RiderStats:
     limit_slope: float = 0
 
     dropped: bool = False
-    limit: float = limit_distance * limit_slope ** 2
     form: int = 1
+
+    @property
+    def limit(self) -> float:
+        return self.limit_distance * self.limit_slope ** 2
 
 @dataclass(frozen=True)
 class KeyPoint:
@@ -40,7 +43,6 @@ class KeyPoint:
     slope_pct: float     # gradient of the segment
     position_km: float      # how long the segment is
     progress: float
-
 
 @dataclass
 class Prediction:

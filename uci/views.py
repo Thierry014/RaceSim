@@ -37,7 +37,7 @@ def course_predict(request, pk):
         form = PredictForm(request.POST)
         if form.is_valid():
             prediction = predict_course(course, form.cleaned_data['riders'])
-            course.pre_analysis = prediction.summary
+            course.pre_analysis = prediction
             course.save()
             return redirect('uci:course_detail', pk=course.pk)
     else:
