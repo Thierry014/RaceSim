@@ -11,7 +11,7 @@ class RiderStats:
     """
 
     name: str
-    form: int | None = None
+    form: int = 0
     breakaway: bool = False
 
     score_climb: int = 1
@@ -21,8 +21,8 @@ class RiderStats:
     score_sprint: int = 1
     score_steep: int = 1
 
-    limit_distance: float | None = 0
-    limit_slope: float | None = 0
+    limit_distance: float = 0
+    limit_slope: float = 0
 
     dropped: bool = False
     limit: float = limit_distance * limit_slope ** 2

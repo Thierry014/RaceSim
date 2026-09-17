@@ -23,6 +23,7 @@ class Rider(models.Model):
     form_trend = models.CharField(max_length=10, choices=FORM_TREND_CHOICES, null=True, blank=True, default='normal')
     breakaway = models.BooleanField(default=False)
     breakaway_note = models.CharField(max_length=100, null=True, blank=True)
+    attack_index = models.IntegerField(null=True, blank=True, default=0)
 
     score_climb = models.IntegerField(null=True, blank=True, default=1, validators=SCORE_VALIDATORS)
     score_wave = models.IntegerField(null=True, blank=True, default=1, validators=SCORE_VALIDATORS)
