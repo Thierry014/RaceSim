@@ -2,3 +2,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
+
+# JetBrains IDE
+.idea/
+
+# SQL files
+*.sql
+*.sqlite3

@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Race, Rider, Course, Bet, Blog
 from .forms import PredictForm
+from .services import predict_course
 
 def index(request):
     races = Race.objects.all()
@@ -35,16 +36,13 @@ def course_predict(request, pk):
     if request.method == "POST":
         form = PredictForm(request.POST)
         if form.is_valid():
-            rds = form.cleaned_data['riders']
-            kps = course.key_point
-            # import predict engine
-            # result = PredictEngine.predict(rds, kps)
-            # course.pre_analysis = result
-            # course.save()
+            prediction = predict_course(course, form.cleaned_data['riders'])
+            course.pre_analysis = prediction.summary
+            course.save()
+            return redirect('uci:course_detail', pk=course.pk)
     else:
         form = PredictForm()
-        return render(request, 'uci/course_predict.html', {'form': form, 'course': course})
-    return render(request, 'uci/course_detail.html', {'form': form, 'course': course})
+    return render(request, 'uci/course_predict.html', {'form': form, 'course': course})
 
 # @login_required
 def bet_create(request, course_pk):
