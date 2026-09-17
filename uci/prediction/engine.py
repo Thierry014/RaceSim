@@ -33,15 +33,17 @@ class PredictEngine:
                     rider.dropped = True
                     dropped_from_kp.append((rider.name, key_point.position_km))
                     break
-            last_pt = key_points[-1]
-            ability_score = last_pt[-1] # todo should have a function to calculate
+            # todo course summary should not just check the kps, it should check course profile as well
+            # course_summary = key_points[-1]
+            course_summary = [('climb', 90), ('punch', 10)]
+            # [('climb', 90), ('punch', 10)]
             if not rider.dropped:
-                # check category of current point, then calculate the socre based on form and speciality
-                ability_score = getattr(rider, f"score_{ability_score}")
-                score_real = Form[rider.form] * ability_score
-                # score_predicted = Form[rider.predict_form] * ability_score
-                survive_from_kp.append((rider.name, "survive", score_real))
-                # survive_from_kp.append((rider.name, "survive", score_real, score_predicted))
+                rdr_score = 0
+                for cat in course_summary:
+                    cat_name, cat_pct = cat[0], cat[1]/100
+                    rdr_ability_score = getattr(rider, f"score_{cat_name}")
+                    rdr_score += rdr_ability_score * cat_pct * Form[rider.form]
+                survive_from_kp.append((rider.name, "survive", rdr_score))
 
         # 2nd rider loop to ability/form short list (todo check punch score)
         print("dropped")
