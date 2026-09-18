@@ -8,4 +8,4 @@ to these dataclasses lives in ``uci.services``.
 from .domain import RiderStats, KeyPoint, Prediction
 from .engine import PredictEngine
 
-__all__ = ["RiderStats", "KeyPoint", "Prediction", "PredictEngine"]
+__all__ = ["RiderStats", "KeyPoint", "Prediction", "PredictEngine" ]

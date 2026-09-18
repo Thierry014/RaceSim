@@ -26,6 +26,7 @@ class RiderStats:
 
     dropped: bool = False
     form: int = 1
+    attack_index: int = 0
 
     @property
     def limit(self) -> float:
@@ -41,8 +42,28 @@ class KeyPoint:
 
     distance_km: float   # where on the course this segment sits
     slope_pct: float     # gradient of the segment
-    position_km: float      # how long the segment is
-    progress: float
+    position_km: float   # how long the segment is
+    progress: float      # what part of the course
+
+    @property
+    def kp_cat(self) -> dict:
+        kp_cat_result = {}
+        progress = self.progress
+        if progress > 95:
+            importance = progress/100
+        else:
+            importance = (progress/100) ** 3
+        x = progress * importance
+        if self.distance_km < 3 and self.slope_pct >= 7.5 and self.progress > 95:
+            kp_cat_result['steep'] = x
+        if ((self.distance_km < 3 and self.slope_pct < 7.5) or (self.slope_pct <= 5)) and self.progress > 95:
+            kp_cat_result['punch'] = x
+        if self.distance_km > 3 and self.slope_pct > 3.5:
+            if self.progress < 95:
+                # todo make calculation more correct should based on 1-self.progress
+                x = x / 2
+            kp_cat_result['climb'] = x
+        return kp_cat_result
 
 @dataclass
 class Prediction:
