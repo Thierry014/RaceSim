@@ -34,7 +34,7 @@ class RaceAdmin(admin.ModelAdmin):
 
 @admin.register(Rider)
 class RiderAdmin(admin.ModelAdmin):
-    list_display = ['name', 'nationality', 'get_age', 'form', 'form_trend', 'score_climb', 'score_tt', 'score_wave', 'score_punch', 'score_sprint']
+    list_display = ['name', 'form', 'form_trend', 'attack_index', 'score_climb', 'score_tt', 'score_wave', 'score_punch', 'score_sprint']
     list_filter = ['nationality', 'breakaway']
     search_fields = ['name']
 

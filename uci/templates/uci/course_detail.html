@@ -92,6 +92,14 @@
         .btn-settled { background-color: #ff0000; color: white; }
         .btn-bet:hover { background-color: #0052a3; }
         .btn-cancel { background-color: #6c757d; color: white; }
+        .btn-predict {
+            display: inline-block;
+            background-color: #0052a3;
+            color: white;
+            text-decoration: none;
+            line-height: normal;
+        }
+        .btn-predict:hover { background-color: #1e7e34; }
         .modal-overlay {
             display: none;
             position: fixed;
@@ -180,6 +188,12 @@
             <span class="value">{{ course.key_point }}</span>
         </div>
         {% endif %}
+        {% if course.course_summary %}
+        <div class="field">
+            <span class="label">Course summary</span>
+            <span class="value">{{ course.course_summary }}</span>
+        </div>
+        {% endif %}
         {% if course.pre_analysis %}
         <div class="field">
             <span class="label">Pre Analysis</span>
@@ -192,7 +206,7 @@
             <span class="value">{{ course.note }}</span>
         </div>
         {% endif %}
-        <a href="{% url 'uci:course_predict' course.pk %}">X</a>
+        <a class="btn btn-predict" href="{% url 'uci:course_predict' course.pk %}">Predict</a>
     </div>
 
     <div class="card">

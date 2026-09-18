@@ -9,3 +9,4 @@ class PredictForm(forms.Form):
         widget=forms.CheckboxSelectMultiple,   # or forms.SelectMultiple for a multi-select list
         label="Fav",
     )
+    auto_on = forms.BooleanField(initial=True, label="Auto Calculation based on KPs")
