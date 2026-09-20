@@ -35,7 +35,7 @@ class RaceAdmin(admin.ModelAdmin):
 @admin.register(Rider)
 class RiderAdmin(admin.ModelAdmin):
     list_display = ['name', 'form', 'form_trend', 'attack_index', 'score_climb', 'score_tt', 'score_wave', 'score_punch', 'score_sprint']
-    list_filter = ['nationality', 'breakaway']
+    list_filter = ['nationality', 'breakaway', 'watch_listed']
     search_fields = ['name']
 
     @admin.display(description='Age', ordering='-date_of_birth')

@@ -56,6 +56,12 @@ def _kps_to_summary(key_points):
                     course_summary[x] += kp.kp_cat[x]
                 else:
                     course_summary[x] = kp.kp_cat[x]
+    if len(reverse_kps):
+        last_kp = reverse_kps[-1]
+        # which means it can be a sprint finish
+        if last_kp.progress < 95:
+            if not course_summary.get("sprint"):
+                course_summary["sprint"] = 20
     return course_summary
 
 def predict_course(course: Course, riders_qs, use_auto) -> Prediction:

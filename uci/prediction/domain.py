@@ -56,9 +56,11 @@ class KeyPoint:
         x = progress * importance
         if self.distance_km < 3 and self.slope_pct >= 7.5 and self.progress > 95:
             kp_cat_result['steep'] = x
-        if ((self.distance_km < 3 and self.slope_pct < 7.5) or (self.slope_pct <= 5)) and self.progress > 95:
+        if (self.distance_km < 3 and 5 < self.slope_pct < 7.5) or (self.slope_pct < 7.5 and self.progress > 95):
             kp_cat_result['punch'] = x
-        if self.distance_km > 3 and self.slope_pct > 3.5:
+        if self.distance_km < 3 and self.slope_pct <= 5 and self.progress < 95:
+            kp_cat_result['wave'] = x
+        if self.distance_km >= 3 and self.slope_pct > 3.5:
             if self.progress < 95:
                 # todo make calculation more correct should based on 1-self.progress
                 x = x / 2
@@ -70,9 +72,5 @@ class Prediction:
     """The engine's result."""
 
     # Ordered best -> worst. Use (name, score) if you want to expose scores.
-    ranking: list[tuple[str, float]] = field(default_factory=list)
+    ranking = []
     summary: str = ""
-
-    @property
-    def winner(self) -> str | None:
-        return self.ranking[0][0] if self.ranking else None

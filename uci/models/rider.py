@@ -36,6 +36,7 @@ class Rider(models.Model):
     limit_slope = models.FloatField(null=True, blank=True, default=10)
 
     form_history_cache = models.JSONField(default=list, blank=True)
+    watch_listed = models.BooleanField(default=False)
 
     FORM_HISTORY_CACHE_MAX = 10
 

@@ -11,6 +11,20 @@ Form = {
     4: 1,
     5: 1.05,
 }
+
+# CLIMB_PER_METER = {
+#     "normal": {
+#         "flat": "0~5",
+#         "wave": "5~20",
+#         "climb": ">20",
+#     },
+#     "tt": {
+#         "flat": "0~15",
+#         "climb": ">10",
+#     }
+#
+# }
+
 # course_summary = {"a": xxx, "b":xxx}
 class PredictEngine:
     """Scores riders against a course's key points and ranks them.
@@ -20,7 +34,7 @@ class PredictEngine:
     """
 
     @staticmethod
-    def predict(riders: list[RiderStats], key_points: list[KeyPoint], course_summary: dict, climb_per_km: float) -> Prediction:
+    def predict(riders: list[RiderStats], key_points: list[KeyPoint], course_summary: dict, climb_per_km: float):
         if not riders:
             return Prediction(summary="No riders provided.")
         dropped_from_kp = []
@@ -48,6 +62,7 @@ class PredictEngine:
                     cat_name, cat_pct = cat, normalized_course_summary[cat]/100
                     rdr_ability_score = getattr(rider, f"score_{cat_name}")
                     rdr_score += rdr_ability_score * cat_pct * Form[rider.form]
+                    rdr_score = round(rdr_score, 2)
                 survive_from_kp.append((rider.name, "survive", rdr_score))
 
         # normal prediction
@@ -65,7 +80,7 @@ class PredictEngine:
             for x in normalized_course_summary:
                 # Todo more rules to determine whether go
                 index = 50
-                match(x):
+                match x:
                     case "climb":
                         print(climb_per_km)
                         if climb_per_km > 5:
@@ -77,5 +92,5 @@ class PredictEngine:
                 attack_list.append(rdr.name)
         print("Might attack")
         print(attack_list)
-        result = {"dropped": dropped_from_kp, "survive": survive_from_kp, "attack":attack_list}
+        result = {"dropped": dropped_from_kp, "survive": survive_from_kp, "attack":attack_list, "normalized": normalized_course_summary}
         return result
