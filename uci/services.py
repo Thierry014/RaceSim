@@ -34,7 +34,7 @@ def _prepare_course(course: Course):
     key_points = []
     course_summary = {}
     if course.key_point:
-        key_points = [KeyPoint(*kp, progress=float(kp[-1]/course.distance_km * 100)) for kp in course.key_point]
+        key_points = [KeyPoint(*kp, progress=round(float(kp[-1]/course.distance_km * 100),2)) for kp in course.key_point]
     if course.course_summary:
         course_summary = course.course_summary
     return key_points, course_summary

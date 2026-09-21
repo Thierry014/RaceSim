@@ -37,6 +37,7 @@ class RiderAdmin(admin.ModelAdmin):
     list_display = ['name', 'form', 'form_trend', 'attack_index', 'score_climb', 'score_tt', 'score_wave', 'score_punch', 'score_sprint']
     list_filter = ['nationality', 'breakaway', 'watch_listed']
     search_fields = ['name']
+    readonly_fields = ['predict_form']
 
     @admin.display(description='Age', ordering='-date_of_birth')
     def get_age(self, obj):

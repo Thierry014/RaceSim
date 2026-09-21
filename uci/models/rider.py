@@ -21,6 +21,8 @@ class Rider(models.Model):
     note = models.TextField(max_length=500, null=True, blank=True)
     form = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=True, blank=True)
     form_trend = models.CharField(max_length=10, choices=FORM_TREND_CHOICES, null=True, blank=True, default='normal')
+    form_duration = models.IntegerField(null=True, blank=True, default=14)
+    date_duration_start = models.DateField(null=True, blank=True)
     breakaway = models.BooleanField(default=False)
     breakaway_note = models.CharField(max_length=100, null=True, blank=True)
     attack_index = models.IntegerField(null=True, blank=True, default=0)
@@ -51,6 +53,23 @@ class Rider(models.Model):
         return today.year - self.date_of_birth.year - (
             (today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day)
         )
+
+    @property
+    def predict_form(self):
+        # 2~5
+        if not self.date_duration_start:
+            return 3
+        num_of_day = (date.today() - self.date_duration_start).days
+        if num_of_day > self.form_duration: return 3
+        peak = self.form_duration / 2
+        if num_of_day <= peak:
+            pf = round((num_of_day / peak) * 5)
+        else:
+            pf= round(5-(((num_of_day - peak)/peak) * 5))
+        if pf<2:
+            pf = 2
+        return pf
+
 
     def save(self, *args, **kwargs):
         form_changed = False

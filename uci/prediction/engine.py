@@ -42,7 +42,7 @@ class PredictEngine:
         normalized_course_summary = {}
         all_vals = sum(course_summary.values())
         for key in course_summary.keys():
-            normalized_course_summary[key] = course_summary[key] / all_vals * 100
+            normalized_course_summary[key] = round((course_summary[key] / all_vals * 100), 2)
         print(key_points)
         print(course_summary)
         print(normalized_course_summary)
