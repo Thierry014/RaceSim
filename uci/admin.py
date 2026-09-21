@@ -37,7 +37,7 @@ class RiderAdmin(admin.ModelAdmin):
     list_display = ['name', 'form', 'form_trend', 'attack_index', 'score_climb', 'score_tt', 'score_wave', 'score_punch', 'score_sprint']
     list_filter = ['nationality', 'breakaway', 'watch_listed']
     search_fields = ['name']
-    readonly_fields = ['predict_form']
+    readonly_fields = ['predict_form', 'limit_point']
 
     @admin.display(description='Age', ordering='-date_of_birth')
     def get_age(self, obj):
@@ -49,6 +49,7 @@ class CourseAdmin(admin.ModelAdmin):
     list_display = ['name', 'winner', 'predict_winner', 'profile_score', 'get_is_won_by_breakaway', 'get_bingo', 'bingo_rate']
     list_filter = ['race']
     search_fields = ['name']
+    exclude = ['start', 'profile_score_20k']
 
     @admin.display(description='Breakaway', boolean=True)
     def get_is_won_by_breakaway(self, obj):

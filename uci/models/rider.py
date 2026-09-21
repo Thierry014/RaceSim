@@ -70,6 +70,9 @@ class Rider(models.Model):
             pf = 2
         return pf
 
+    @property
+    def limit_point(self):
+        return self.limit_distance * self.limit_slope ** 2
 
     def save(self, *args, **kwargs):
         form_changed = False

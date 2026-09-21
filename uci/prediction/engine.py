@@ -34,7 +34,7 @@ class PredictEngine:
     """
 
     @staticmethod
-    def predict(riders: list[RiderStats], key_points: list[KeyPoint], course_summary: dict, climb_per_km: float):
+    def predict(riders: list[RiderStats], key_points: list[KeyPoint], course_summary: dict, current_form:bool =True):
         if not riders:
             return Prediction(summary="No riders provided.")
         dropped_from_kp = []
@@ -43,12 +43,13 @@ class PredictEngine:
         all_vals = sum(course_summary.values())
         for key in course_summary.keys():
             normalized_course_summary[key] = round((course_summary[key] / all_vals * 100), 2)
-        print(key_points)
+        # print(key_points)
         print(course_summary)
         print(normalized_course_summary)
 
         # first rider loop to check they can survive and how good they can
         for rider in riders:
+            form_to_use = rider.form if current_form else rider.predict_form
             for key_point in key_points:
                 point_index = key_point.distance_km * (key_point.slope_pct ** 2)
                 if rider.limit < point_index:  # should add keypoint 3
@@ -61,7 +62,7 @@ class PredictEngine:
                 for cat in normalized_course_summary.keys():
                     cat_name, cat_pct = cat, normalized_course_summary[cat]/100
                     rdr_ability_score = getattr(rider, f"score_{cat_name}")
-                    rdr_score += rdr_ability_score * cat_pct * Form[rider.form]
+                    rdr_score += rdr_ability_score * cat_pct * Form[form_to_use]
                     rdr_score = round(rdr_score, 2)
                 survive_from_kp.append((rider.name, "survive", rdr_score))
 
@@ -82,10 +83,7 @@ class PredictEngine:
                 index = 50
                 match x:
                     case "climb":
-                        print(climb_per_km)
-                        if climb_per_km > 5:
-                            if getattr(rdr, f"score_climb") >= index:
-                                to_add = True
+                        ...
                     case _:
                         ...
             if to_add and rdr not in attack_list:
@@ -94,3 +92,7 @@ class PredictEngine:
         print(attack_list)
         result = {"dropped": dropped_from_kp, "survive": survive_from_kp, "attack":attack_list, "normalized": normalized_course_summary}
         return result
+
+    @staticmethod
+    def predict_tt():
+        ...

@@ -27,6 +27,10 @@ class Course(models.Model):
     bingo_rate = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     settled = models.BooleanField(default=False)
 
+    @property
+    def climb_per_km(self):
+        return round(self.elevation_gain_m / self.distance_km)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.__original_predict_winner_id = self.predict_winner_id

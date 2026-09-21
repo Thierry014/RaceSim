@@ -11,7 +11,6 @@ class RiderStats:
     """
 
     name: str
-    form: int = 0
     breakaway: bool = False
 
     score_climb: int = 1
@@ -26,6 +25,7 @@ class RiderStats:
 
     dropped: bool = False
     form: int = 1
+    predict_form: int = 1
     attack_index: int = 0
 
     @property

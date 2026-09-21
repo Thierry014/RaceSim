@@ -13,3 +13,13 @@ top10 => (70-, )++1
 dropped/bad happen --1 (65+ only)  65 means ok point
 
 update limitation / drop point
+
+
+
+
+# score 
+
+# 30 can't do
+# 50 can do
+# 60 my strength
+# 70 T1 LEVEL

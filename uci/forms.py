@@ -10,3 +10,4 @@ class PredictForm(forms.Form):
         label="Fav",
     )
     auto_on = forms.BooleanField(initial=True, label="Auto Calculation based on KPs")
+    current_form = forms.BooleanField(initial=True, label="Current Form")
